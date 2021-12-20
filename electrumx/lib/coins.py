@@ -3699,7 +3699,7 @@ class Horizen(EquihashMixin, Coin):
     TX_COUNT_HEIGHT = 1
     TX_PER_BLOCK = 1
     RPC_PORT = 9387
-    REORG_LIMIT = 5000
+    REORG_LIMIT = 100
 
 
 class HorizenTestnet(Horizen):
@@ -3710,7 +3710,7 @@ class HorizenTestnet(Horizen):
     WIF_BYTE = bytes.fromhex("EF")
     GENESIS_HASH = ('03e1c4bb705c871bf9bfda3e74b7f8f8'
                     '6bff267993c215a89d5795e3708e5e1f')
-    REORG_LIMIT = 8000
+    REORG_LIMIT = 100
     RPC_PORT = 19387
 
 
