@@ -3684,6 +3684,7 @@ class Defcoin(Coin):
     REORG_LIMIT = 5000
     DESERIALIZER = lib_tx.DeserializerAuxPowSegWit
 
+
 class Horizen(EquihashMixin, Coin):
     NAME = "Horizen"
     SHORTNAME = "ZEN"
@@ -3712,7 +3713,7 @@ class HorizenTestnet(Horizen):
     REORG_LIMIT = 8000
     RPC_PORT = 19387
 
-    
+
 class Auroracoin(Coin):
     NAME = "Auroracoin"
     SHORTNAME = "AUR"

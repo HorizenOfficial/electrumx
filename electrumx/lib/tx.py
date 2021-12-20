@@ -437,14 +437,14 @@ class DeserializerHorizen(DeserializerEquihash):
                 if isinstance(blk, tuple) and blk[0] == 32:
                     rp_idx = script.index(blk[1]) - 1  # include the push op
                     return script[:rp_idx]  # strip replay protection data
-        except:
+        except Exception:
             pass
         return script
 
     def _read_cert(self):
-        self._read_nbytes(32)  # sidechain id
-        self._read_le_uint32() # epoch number
-        self._read_le_uint64() # quality
+        self._read_nbytes(32)   # sidechain id
+        self._read_le_uint32()  # epoch number
+        self._read_le_uint64()  # quality
 
         # end epoch cum sidechain transaction comm tree root
         end_epoch_cum_sc_tx_comm_tree_root_len = self._read_varint()
@@ -452,7 +452,7 @@ class DeserializerHorizen(DeserializerEquihash):
 
         # sidechain proof
         sc_proof_len = self._read_varint()
-        self.cursor += sc_proof_len 
+        self.cursor += sc_proof_len
 
         # vfield element certificate field
         v_field_element_certificate_field_len = self._read_varint()
@@ -466,30 +466,30 @@ class DeserializerHorizen(DeserializerEquihash):
             field_len = self._read_varint()
             self.cursor += field_len
 
-        self._read_le_uint64() # forward transfer sidechain fee
-        self._read_le_uint64() # mainchain backwards transfer request sidechain fee
+        self._read_le_uint64()  # forward transfer sidechain fee
+        self._read_le_uint64()  # mainchain backwards transfer request sidechain fee
 
     def _read_csw_inputs(self):
         csw_len = self._read_varint()
 
         for x in range(csw_len):
-            self._read_le_uint64() # value
-            self._read_nbytes(32)  # sidechain id
-            nullifer_len = self._read_varint() # nullifer
+            self._read_le_uint64()  # value
+            self._read_nbytes(32)   # sidechain id
+            nullifer_len = self._read_varint()  # nullifer
             self.cursor += nullifer_len
 
-            self._read_nbytes(20)  # pub key hash 
+            self._read_nbytes(20)  # pub key hash
 
-            sc_proof_len = self._read_varint() # sidechain proof
-            self.cursor += sc_proof_len  
+            sc_proof_len = self._read_varint()  # sidechain proof
+            self.cursor += sc_proof_len
 
-            act_cert_data_hash_len = self._read_varint() # actCertDataHash
+            act_cert_data_hash_len = self._read_varint()  # actCertDataHash
             self.cursor += act_cert_data_hash_len
 
-            ceasing_cum_sc_tx_comm_tree_len = self._read_varint() # ceasingCumScTxCommTree
+            ceasing_cum_sc_tx_comm_tree_len = self._read_varint()  # ceasingCumScTxCommTree
             self.cursor += ceasing_cum_sc_tx_comm_tree_len
 
-            redeem_script_len = self._read_varint() # redeemScriptLength
+            redeem_script_len = self._read_varint()  # redeemScriptLength
             self.cursor += redeem_script_len
 
     def _read_sc_outputs(self):
@@ -499,7 +499,7 @@ class DeserializerHorizen(DeserializerEquihash):
             self._read_le_int32()   # withdrawalEpochLength
             self._read_le_uint64()  # value
             self._read_nbytes(32)   # address
-            custom_data_len = self._read_varint() # customData
+            custom_data_len = self._read_varint()  # customData
             self._read_nbytes(custom_data_len)
 
             # constant data
@@ -521,7 +521,7 @@ class DeserializerHorizen(DeserializerEquihash):
             # vFieldElementCertificateFieldConfig
             v_field_element_certificate_field_config_len = self._read_varint()
             for y in range(v_field_element_certificate_field_config_len):
-                self.cursor += 1 # self._read_le_uint8()
+                self.cursor += 1  # self._read_le_uint8()
 
             # vBitVectorCertificateFieldConfig
             v_bit_vector_certificate_field_config_len = self._read_varint()
@@ -529,22 +529,20 @@ class DeserializerHorizen(DeserializerEquihash):
                 bit_vector = self._read_le_uint32()
                 max_compressed_size = self._read_le_uint32()
 
-
-            self._read_le_uint64() # forward transfer fee
-            self._read_le_uint64() # mainchain backward transfer request fee
-            self.cursor += 1 # self._read_le_uint8() #mbtrRequestDataLength
-
+            self._read_le_uint64()  # forward transfer fee
+            self._read_le_uint64()  # mainchain backward transfer request fee
+            self.cursor += 1  # self._read_le_uint8() #mbtrRequestDataLength
 
     def _read_ft_outputs(self):
         ft_len = self._read_varint()
 
         for x in range(ft_len):
-            self._read_le_uint64() # value
-            self._read_nbytes(32)  # address
-            self._read_nbytes(32)  # sidechain id
-            self._read_nbytes(20)  # mc return address
+            self._read_le_uint64()  # value
+            self._read_nbytes(32)   # address
+            self._read_nbytes(32)   # sidechain id
+            self._read_nbytes(20)   # mc return address
 
-    def _read_mbtr_outputs(self): 
+    def _read_mbtr_outputs(self):
         mbtr_len = self._read_varint()
 
         for x in range(mbtr_len):
@@ -555,9 +553,8 @@ class DeserializerHorizen(DeserializerEquihash):
                 len = self._read_varint()
                 self.cursor += len
 
-            self._read_nbytes(20)  # pubKeyHash
-            self._read_le_uint64() # sidechain fee
-
+            self._read_nbytes(20)   # pubKeyHash
+            self._read_le_uint64()  # sidechain fee
 
     def _read_sidechain(self):
         self._read_csw_inputs()
