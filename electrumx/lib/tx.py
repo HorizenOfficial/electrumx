@@ -417,6 +417,188 @@ class DeserializerZcash(DeserializerEquihash):
         return base_tx
 
 
+class DeserializerHorizen(DeserializerEquihash):
+    OP_CHECKBLOCKATHEIGHT = OpCodes.OP_NOP5
+
+    def _read_output(self):
+        value = self._read_le_int64()
+        script = self.remove_replay_protection(self._read_varbytes())
+
+        return TxOutput(
+            value,
+            script
+        )
+
+    def remove_replay_protection(self, script):
+        try:
+            ops = Script.get_ops(script)
+            if ops[-1] == self.OP_CHECKBLOCKATHEIGHT:
+                blk = ops[-3]  # block hash
+                if isinstance(blk, tuple) and blk[0] == 32:
+                    rp_idx = script.index(blk[1]) - 1  # include the push op
+                    return script[:rp_idx]  # strip replay protection data
+        except:
+            pass
+        return script
+
+    def _read_cert(self):
+        self._read_nbytes(32)  # sidechain id
+        self._read_le_uint32() # epoch number
+        self._read_le_uint64() # quality
+
+        # end epoch cum sidechain transaction comm tree root
+        end_epoch_cum_sc_tx_comm_tree_root_len = self._read_varint()
+        self.cursor += end_epoch_cum_sc_tx_comm_tree_root_len
+
+        # sidechain proof
+        sc_proof_len = self._read_varint()
+        self.cursor += sc_proof_len 
+
+        # vfield element certificate field
+        v_field_element_certificate_field_len = self._read_varint()
+        for x in range(v_field_element_certificate_field_len):
+            field_len = self._read_varint()
+            self.cursor += field_len
+
+        # vbit vector certificate field
+        v_bit_vector_certificate_field_len = self._read_varint()
+        for x in range(v_bit_vector_certificate_field_len):
+            field_len = self._read_varint()
+            self.cursor += field_len
+
+        self._read_le_uint64() # forward transfer sidechain fee
+        self._read_le_uint64() # mainchain backwards transfer request sidechain fee
+
+    def _read_csw_inputs(self):
+        csw_len = self._read_varint()
+
+        for x in range(csw_len):
+            self._read_le_uint64() # value
+            self._read_nbytes(32)  # sidechain id
+            nullifer_len = self._read_varint() # nullifer
+            self.cursor += nullifer_len
+
+            self._read_nbytes(20)  # pub key hash 
+
+            sc_proof_len = self._read_varint() # sidechain proof
+            self.cursor += sc_proof_len  
+
+            act_cert_data_hash_len = self._read_varint() # actCertDataHash
+            self.cursor += act_cert_data_hash_len
+
+            ceasing_cum_sc_tx_comm_tree_len = self._read_varint() # ceasingCumScTxCommTree
+            self.cursor += ceasing_cum_sc_tx_comm_tree_len
+
+            redeem_script_len = self._read_varint() # redeemScriptLength
+            self.cursor += redeem_script_len
+
+    def _read_sc_outputs(self):
+        sc_output_len = self._read_varint()
+
+        for x in range(sc_output_len):
+            self._read_le_int32()   # withdrawalEpochLength
+            self._read_le_uint64()  # value
+            self._read_nbytes(32)   # address
+            custom_data_len = self._read_varint() # customData
+            self._read_nbytes(custom_data_len)
+
+            # constant data
+            constant_data_option = self._read_varint()
+            if constant_data_option == 1:
+                constant_data_len = self._read_varint()
+                self._read_nbytes(constant_data_len)
+
+            # wCertVk
+            w_cert_vk_len = self._read_varint()
+            self._read_nbytes(w_cert_vk_len)
+
+            # wCeasedVkOption
+            w_ceased_vk_option = self._read_varint()
+            if w_ceased_vk_option == 1:
+                w_ceased_vk_len = self._read_varint()
+                self._read_nbytes(w_ceased_vk_len)
+
+            # vFieldElementCertificateFieldConfig
+            v_field_element_certificate_field_config_len = self._read_varint()
+            for y in range(v_field_element_certificate_field_config_len):
+                self.cursor += 1 # self._read_le_uint8()
+
+            # vBitVectorCertificateFieldConfig
+            v_bit_vector_certificate_field_config_len = self._read_varint()
+            for z in range(v_bit_vector_certificate_field_config_len):
+                bit_vector = self._read_le_uint32()
+                max_compressed_size = self._read_le_uint32()
+
+
+            self._read_le_uint64() # forward transfer fee
+            self._read_le_uint64() # mainchain backward transfer request fee
+            self.cursor += 1 # self._read_le_uint8() #mbtrRequestDataLength
+
+
+    def _read_ft_outputs(self):
+        ft_len = self._read_varint()
+
+        for x in range(ft_len):
+            self._read_le_uint64() # value
+            self._read_nbytes(32)  # address
+            self._read_nbytes(32)  # sidechain id
+            self._read_nbytes(20)  # mc return address
+
+    def _read_mbtr_outputs(self): 
+        mbtr_len = self._read_varint()
+
+        for x in range(mbtr_len):
+            self._read_nbytes(32)  # sidechain id
+            sc_request_data_len = self._read_varint()
+
+            for y in range(sc_request_data_len):
+                len = self._read_varint()
+                self.cursor += len
+
+            self._read_nbytes(20)  # pubKeyHash
+            self._read_le_uint64() # sidechain fee
+
+
+    def _read_sidechain(self):
+        self._read_csw_inputs()
+        self._read_sc_outputs()
+        self._read_ft_outputs()
+        self._read_mbtr_outputs()
+
+    def read_tx(self):
+        version = self._read_le_int32()  # can be negative for Groth txs
+
+        if version == -5:
+            self._read_cert()
+
+        inputs = self._read_inputs()
+        outputs = self._read_outputs()
+
+        if version == -4:
+            self._read_sidechain()
+
+        locktime = self._read_le_uint32() if version != -5 else 0
+
+        base_tx = Tx(
+            version,
+            inputs,
+            outputs,
+            locktime
+        )
+
+        if version >= 2 or version == -3:
+            joinsplit_size = self._read_varint()
+            if joinsplit_size > 0:
+                is_groth = version == -3
+                joinsplit_desc_len = 1506 + (192 if is_groth else 296)
+                # JSDescription
+                self.cursor += joinsplit_size * joinsplit_desc_len
+                self.cursor += 32  # joinSplitPubKey
+                self.cursor += 64  # joinSplitSig
+
+        return base_tx
+
+
 @dataclass
 class TxPIVX:
     '''Class representing a PIVX transaction.'''

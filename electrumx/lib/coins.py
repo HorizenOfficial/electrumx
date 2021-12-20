@@ -3684,7 +3684,35 @@ class Defcoin(Coin):
     REORG_LIMIT = 5000
     DESERIALIZER = lib_tx.DeserializerAuxPowSegWit
 
+class Horizen(EquihashMixin, Coin):
+    NAME = "Horizen"
+    SHORTNAME = "ZEN"
+    NET = "mainnet"
+    P2PKH_VERBYTE = bytes.fromhex("2089")
+    P2SH_VERBYTES = [bytes.fromhex("2096")]
+    WIF_BYTE = bytes.fromhex("80")
+    GENESIS_HASH = ('0007104ccda289427919efc39dc9e4d4'
+                    '99804b7bebc22df55f8b834301260602')
+    DESERIALIZER = lib_tx.DeserializerHorizen
+    TX_COUNT = 1
+    TX_COUNT_HEIGHT = 1
+    TX_PER_BLOCK = 1
+    RPC_PORT = 9387
+    REORG_LIMIT = 5000
 
+
+class HorizenTestnet(Horizen):
+    SHORTNAME = "tZEN"
+    NET = "testnet"
+    P2PKH_VERBYTE = bytes.fromhex("2098")
+    P2SH_VERBYTES = [bytes.fromhex("2092")]
+    WIF_BYTE = bytes.fromhex("EF")
+    GENESIS_HASH = ('03e1c4bb705c871bf9bfda3e74b7f8f8'
+                    '6bff267993c215a89d5795e3708e5e1f')
+    REORG_LIMIT = 8000
+    RPC_PORT = 19387
+
+    
 class Auroracoin(Coin):
     NAME = "Auroracoin"
     SHORTNAME = "AUR"
