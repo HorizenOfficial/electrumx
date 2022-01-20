@@ -595,6 +595,18 @@ class DeserializerHorizen(DeserializerEquihash):
 
         return base_tx
 
+    def read_tx_block_v3(self):
+        '''Returns a list of (deserialized_tx, tx_hash) pairs.'''
+        read = self.read_tx_and_hash
+
+        txs = [read() for _ in range(self._read_varint())]
+        num_certs = self._read_varint()
+        print(f"num of certs = {num_certs}")
+        certs = [read() for _ in range(num_certs)]
+        print(f'certs = {certs}')
+
+        return txs + certs
+
 
 @dataclass
 class TxPIVX:
