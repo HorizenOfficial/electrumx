@@ -457,8 +457,8 @@ class BlockProcessor:
             # Add the new UTXOs
             for idx, txout in enumerate(tx.outputs):
                 print(f'idx {idx}, txout {txout}')
-                spendable = is_unspendable(txout.pk_script)
-                print(f'spendable = {spendable}')
+                unspendable = is_unspendable(txout.pk_script)
+                print(f'unspendable = {unspendable}')
                 # Ignore unspendable outputs
                 if is_unspendable(txout.pk_script):
                     continue
