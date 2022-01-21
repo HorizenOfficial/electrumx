@@ -420,6 +420,19 @@ class DeserializerZcash(DeserializerEquihash):
 class DeserializerHorizen(DeserializerEquihash):
     OP_CHECKBLOCKATHEIGHT = OpCodes.OP_NOP5
 
+    def _read_backward_transfer_outputs(self):
+        read_output = self._read_backward_transfer_output
+        return [read_output() for i in range(self._read_varint())]
+    
+    def _read_backward_transfer_output(self):
+        value = self._read_le_int64()
+        script = self._read_nbytes(20)
+
+        return TxOutput(
+            value,
+            script
+        )
+
     def _read_output(self):
         value = self._read_le_int64()
         script = self.remove_replay_protection(self._read_varbytes())
@@ -571,6 +584,9 @@ class DeserializerHorizen(DeserializerEquihash):
         inputs = self._read_inputs()
         outputs = self._read_outputs()
 
+        if version == -5:
+            self._read_backward_transfer_outputs()
+
         if version == -4:
             self._read_sidechain()
 
@@ -593,7 +609,7 @@ class DeserializerHorizen(DeserializerEquihash):
                 self.cursor += 32  # joinSplitPubKey
                 self.cursor += 64  # joinSplitSig
 
-        return base_tx
+        return base_tx   
 
     def read_tx_block_v3(self):
         '''Returns a list of (deserialized_tx, tx_hash) pairs.'''

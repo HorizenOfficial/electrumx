@@ -443,8 +443,6 @@ class BlockProcessor:
             hashXs = []
             append_hashX = hashXs.append
             tx_numb = to_le_uint64(tx_num)[:TXNUM_LEN]
-            print(f'tx_num = {tx_num}')
-            print(f'tx_numb = {tx_numb}')
 
             # Spend the inputs
             for txin in tx.inputs:
@@ -456,9 +454,6 @@ class BlockProcessor:
 
             # Add the new UTXOs
             for idx, txout in enumerate(tx.outputs):
-                print(f'idx {idx}, txout {txout}')
-                unspendable = is_unspendable(txout.pk_script)
-                print(f'unspendable = {unspendable}')
                 # Ignore unspendable outputs
                 if is_unspendable(txout.pk_script):
                     continue
@@ -617,11 +612,12 @@ class BlockProcessor:
         all UTXOs so not finding one indicates a logic error or DB
         corruption.
         '''
+        print('spend_utxo')
         # Fast track is it being in the cache
         idx_packed = pack_le_uint32(tx_idx)
         cache_value = self.utxo_cache.pop(tx_hash + idx_packed, None)
-        print(f'tx_hash {tx_hash}, tx_idx {tx_idx}')
-        print(f'idx_packed {idx_packed}')
+        look_up = tx_hash + idx_packed
+        print(f'tx_hash + idx_packed {look_up}')
         if cache_value:
             print('return cache_value')
             return cache_value
@@ -633,7 +629,6 @@ class BlockProcessor:
         # Key: b'h' + compressed_tx_hash + tx_idx + tx_num
         # Value: hashX
         prefix = b'h' + tx_hash[:COMP_TXID_LEN] + idx_packed
-        print(f'prefix = {prefix}')
         candidates = {db_key: hashX for db_key, hashX
                       in self.db.utxo_db.iterator(prefix=prefix)}
 
@@ -644,7 +639,6 @@ class BlockProcessor:
                 tx_num, = unpack_le_uint64(tx_num_packed + txnum_padding)
                 hash, _height = self.db.fs_tx_hash(tx_num)
                 if hash != tx_hash:
-                    print('right before assert')
                     assert hash is not None  # Should always be found
                     continue
 
