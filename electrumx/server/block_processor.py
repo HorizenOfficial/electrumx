@@ -453,6 +453,9 @@ class BlockProcessor:
 
             # Add the new UTXOs
             for idx, txout in enumerate(tx.outputs):
+                print(f'idx {idx}, txout {txout}')
+                spendable = is_unspendable(txout.pk_script)
+                print(f'spendable = {spendable}')
                 # Ignore unspendable outputs
                 if is_unspendable(txout.pk_script):
                     continue
@@ -460,6 +463,9 @@ class BlockProcessor:
                 # Get the hashX
                 hashX = script_hashX(txout.pk_script)
                 append_hashX(hashX)
+                k = tx_hash + to_le_uint32(idx)
+                v = hashX + tx_numb + to_le_uint64(txout.value)
+                print(f'store {k}, {v}')
                 put_utxo(tx_hash + to_le_uint32(idx),
                          hashX + tx_numb + to_le_uint64(txout.value))
 
