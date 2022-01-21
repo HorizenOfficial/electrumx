@@ -404,6 +404,7 @@ class BlockProcessor:
 
         for block in blocks:
             height += 1
+            print(f"block height {height}")
             is_unspendable = (is_unspendable_genesis if height >= genesis_activation
                               else is_unspendable_legacy)
             undo_info = self.advance_txs(block.transactions, is_unspendable)

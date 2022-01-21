@@ -3706,14 +3706,14 @@ class Horizen(EquihashMixin, Coin):
         '''Return a Block namedtuple given a raw block and its height.'''
         header = cls.block_header(raw_block, height)
         version = util.unpack_le_uint32_from(header)[0]
-        print(f"block height {height}")
+        # print(f"block height {height}")
 
         if version == 3:
             txs = cls.DESERIALIZER(raw_block, start=len(header)).read_tx_block_v3()
         else:
             txs = cls.DESERIALIZER(raw_block, start=len(header)).read_tx_block()
 
-        print(f"at height {height}, txs = {txs}")
+        # print(f"at height {height}, txs = {txs}")
 
         return Block(raw_block, header, txs)
 

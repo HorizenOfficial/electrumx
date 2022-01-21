@@ -601,9 +601,9 @@ class DeserializerHorizen(DeserializerEquihash):
 
         txs = [read() for _ in range(self._read_varint())]
         num_certs = self._read_varint()
-        print(f"num of certs = {num_certs}")
+        # print(f"num of certs = {num_certs}")
         certs = [read() for _ in range(num_certs)]
-        print(f'certs = {certs}')
+        # print(f'certs = {certs}')
 
         return txs + certs
 
