@@ -585,7 +585,7 @@ class DeserializerHorizen(DeserializerEquihash):
         outputs = self._read_outputs()
 
         if version == -5:
-            self._read_backward_transfer_outputs()
+            outputs = outputs.extend(self._read_backward_transfer_outputs())
 
         if version == -4:
             self._read_sidechain()
