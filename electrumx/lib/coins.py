@@ -3714,6 +3714,7 @@ class Horizen(EquihashMixin, Coin):
 
         return Block(raw_block, header, txs)
 
+
 class HorizenTestnet(Horizen):
     SHORTNAME = "tZEN"
     NET = "testnet"
