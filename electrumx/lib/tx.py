@@ -32,7 +32,7 @@ from hashlib import blake2s
 from typing import Sequence
 
 from electrumx.lib.hash import sha256, double_sha256, hash_to_hex_str
-from electrumx.lib.script import OpCodes, Script
+from electrumx.lib.script import OpCodes, Script, ScriptPubKey
 from electrumx.lib.util import (
     unpack_le_int32_from, unpack_le_int64_from, unpack_le_uint16_from,
     unpack_be_uint16_from,
@@ -426,7 +426,8 @@ class DeserializerHorizen(DeserializerEquihash):
     
     def _read_backward_transfer_output(self):
         value = self._read_le_int64()
-        script = self._read_nbytes(20)
+        p2pkh = self._read_nbytes(20)
+        script = ScriptPubKey.P2PKH_script(p2pkh)
 
         return TxOutput(
             value,
@@ -585,7 +586,11 @@ class DeserializerHorizen(DeserializerEquihash):
         outputs = self._read_outputs()
 
         if version == -5:
-            outputs = outputs.extend(self._read_backward_transfer_outputs())
+            # read backward transfer outputs
+            bt_outputs = self._read_backward_transfer_outputs()
+            print(f'bt_outputs = {bt_outputs}')
+            outputs.extend(bt_outputs)
+            print(f'final outputs = {outputs}')
 
         if version == -4:
             self._read_sidechain()
