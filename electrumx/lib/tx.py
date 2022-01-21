@@ -32,7 +32,7 @@ from hashlib import blake2s
 from typing import Sequence
 
 from electrumx.lib.hash import sha256, double_sha256, hash_to_hex_str
-from electrumx.lib.script import OpCodes, Script
+from electrumx.lib.script import OpCodes, Script, ScriptPubKey
 from electrumx.lib.util import (
     unpack_le_int32_from, unpack_le_int64_from, unpack_le_uint16_from,
     unpack_be_uint16_from,
@@ -429,6 +429,20 @@ class DeserializerHorizen(DeserializerEquihash):
             script
         )
 
+    def _read_backward_transfer_outputs(self):
+        read_output = self._read_backward_transfer_output
+        return [read_output() for i in range(self._read_varint())]
+
+    def _read_backward_transfer_output(self):
+        value = self._read_le_int64()
+        p2pkh = self._read_nbytes(20)
+        script = ScriptPubKey.P2PKH_script(p2pkh)
+
+        return TxOutput(
+            value,
+            script
+        )
+
     def remove_replay_protection(self, script):
         try:
             ops = Script.get_ops(script)
@@ -571,6 +585,11 @@ class DeserializerHorizen(DeserializerEquihash):
         inputs = self._read_inputs()
         outputs = self._read_outputs()
 
+        if version == -5:
+            # read backward transfer outputs
+            bt_outputs = self._read_backward_transfer_outputs()
+            outputs.extend(bt_outputs)
+
         if version == -4:
             self._read_sidechain()
 
@@ -595,6 +614,15 @@ class DeserializerHorizen(DeserializerEquihash):
 
         return base_tx
 
+    def read_tx_block_v3(self):
+        '''Returns a list of (deserialized_tx, tx_hash) pairs.'''
+        read = self.read_tx_and_hash
+        
+        txs = [read() for _ in range(self._read_varint())]
+        num_certs = self._read_varint()
+        certs = [read() for _ in range(num_certs)]
+
+        return txs + certs
 
 @dataclass
 class TxPIVX:
