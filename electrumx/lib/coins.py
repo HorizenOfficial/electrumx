@@ -3701,6 +3701,19 @@ class Horizen(EquihashMixin, Coin):
     RPC_PORT = 9387
     REORG_LIMIT = 100
 
+    @classmethod
+    def block(cls, raw_block, height):
+        '''Return a Block namedtuple given a raw block and its height.'''
+        header = cls.block_header(raw_block, height)
+        version = util.unpack_le_uint32_from(header)[0]
+
+        if version == 3:
+            txs = cls.DESERIALIZER(raw_block, start=len(header)).read_tx_block_v3()
+        else:
+            txs = cls.DESERIALIZER(raw_block, start=len(header)).read_tx_block()
+
+        return Block(raw_block, header, txs)
+
 
 class HorizenTestnet(Horizen):
     SHORTNAME = "tZEN"

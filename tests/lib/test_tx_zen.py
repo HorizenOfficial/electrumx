@@ -31,6 +31,7 @@ tests = [
                     "n":0,
                     "scriptPubKey":{
                         "hex":"76a9142deb2eb50e82e832f8d44c004c3b01e6a764012388ac2095588131f6c4b2bb374c1753e062132621711a8b4863f106f4017760f1be06000374cc0eb4",
+                        "hex_without_replay":"76a9142deb2eb50e82e832f8d44c004c3b01e6a764012388ac",
                         "asm":"OP_DUP OP_HASH160 2deb2eb50e82e832f8d44c004c3b01e6a7640123 OP_EQUALVERIFY OP_CHECKSIG 95588131f6c4b2bb374c1753e062132621711a8b4863f106f4017760f1be0600 969844 OP_CHECKBLOCKATHEIGHT",
                         "addresses":[
                         "ztXLkuT3LamRj2ro2pnMCnmEUyKvcZ6k4vt"
@@ -43,6 +44,7 @@ tests = [
                     "n":1,
                     "scriptPubKey":{
                         "hex":"76a914a77ba12153c69ce8b42cfe46250dd898abe4261088ac2095588131f6c4b2bb374c1753e062132621711a8b4863f106f4017760f1be06000374cc0eb4",
+                        "hex_without_replay":"76a914a77ba12153c69ce8b42cfe46250dd898abe4261088ac",
                         "asm":"OP_DUP OP_HASH160 a77ba12153c69ce8b42cfe46250dd898abe42610 OP_EQUALVERIFY OP_CHECKSIG 95588131f6c4b2bb374c1753e062132621711a8b4863f106f4017760f1be0600 969844 OP_CHECKBLOCKATHEIGHT",
                         "addresses":[
                         "ztiRXi1fggQrKAcFQTSUa6jCZNDtWDaZh3o"
@@ -85,6 +87,7 @@ tests = [
                     "n": 0,
                     "scriptPubKey": {
                         "hex": "76a914b42167247213fb4cc9d0ed7cf3f26109e0d09c1688ac206bfae64c63f7bb479d927b0498a06112d06a2943f622efd0e1f5f7cf37820c0003134d0eb4",
+                        "hex_without_replay":"76a914b42167247213fb4cc9d0ed7cf3f26109e0d09c1688ac",
                         "asm": "OP_DUP OP_HASH160 b42167247213fb4cc9d0ed7cf3f26109e0d09c16 OP_EQUALVERIFY OP_CHECKSIG 6bfae64c63f7bb479d927b0498a06112d06a2943f622efd0e1f5f7cf37820c00 937235 OP_CHECKBLOCKATHEIGHT",
                         "addresses": ["ztjaQQTWoTH6JKgmTuSux1MvDEQSv24K5c8"],
                         "type": "pubkeyhash",
@@ -125,6 +128,7 @@ tests = [
                     "n": 0,
                     "scriptPubKey": {
                         "hex": "76a914ec6039c0505e74b8f74fb1e22b77da64d30ce6b388ac2082306745a78cbb7256e1780728215be053c55ec7ff99e5abac144a6216170c0003834d0eb4",
+                        "hex_without_replay":"76a914ec6039c0505e74b8f74fb1e22b77da64d30ce6b388ac",
                         "asm": "OP_DUP OP_HASH160 ec6039c0505e74b8f74fb1e22b77da64d30ce6b3 OP_EQUALVERIFY OP_CHECKSIG 82306745a78cbb7256e1780728215be053c55ec7ff99e5abac144a6216170c00 937347 OP_CHECKBLOCKATHEIGHT",
                         "addresses": ["ztphoWCQmyJVuNq2L3SLnRgy2Lw5i5a7hxL"],
                         "type": "pubkeyhash"
@@ -288,6 +292,7 @@ tests = [
                     "scriptPubKey": {
                         "asm": "OP_DUP OP_HASH160 3fb0b6fa2d96d2272489eab98998e2e59cb1c30a OP_EQUALVERIFY OP_CHECKSIG 818010e3750c8103eb8c6296c9cdd3732ebf813b2fe65a7a079ca2a95aff1b00 123 OP_CHECKBLOCKATHEIGHT",
                         "hex": "76a9143fb0b6fa2d96d2272489eab98998e2e59cb1c30a88ac20818010e3750c8103eb8c6296c9cdd3732ebf813b2fe65a7a079ca2a95aff1b00017bb4",
+                        "hex_without_replay":"76a9143fb0b6fa2d96d2272489eab98998e2e59cb1c30a88ac",
                         "reqSigs": 1,
                         "type": "pubkeyhashreplay",
                         "addresses": ["ztYxj2VixTJJCok9dRyJRYQzoNhLv5AU478"],
@@ -313,6 +318,7 @@ tests = [
                     "scriptPubKey": {
                         "asm": "OP_DUP OP_HASH160 3fb0b6fa2d96d2272489eab98998e2e59cb1c30a OP_EQUALVERIFY OP_CHECKSIG 69f18aabfd618a4b061f072e6a8aed5960190034b881892efff2787e84c12d0a 141 OP_CHECKBLOCKATHEIGHT",
                         "hex": "76a9143fb0b6fa2d96d2272489eab98998e2e59cb1c30a88ac2069f18aabfd618a4b061f072e6a8aed5960190034b881892efff2787e84c12d0a028d00b4",
+                        "hex_without_replay":"76a9143fb0b6fa2d96d2272489eab98998e2e59cb1c30a88ac",
                         "reqSigs": 1,
                         "type": "pubkeyhashreplay",
                         "addresses": ["ztYxj2VixTJJCok9dRyJRYQzoNhLv5AU478"],
@@ -351,6 +357,7 @@ tests = [
                     "n": 0,
                     "scriptPubKey": {
                         "hex": "76a914ec6039c0505e74b8f74fb1e22b77da64d30ce6b388ac20a975e6c1ba29f90821c40ca9590c5b4ded3cc855d4e0c40ddd73ab753f7e000003084f0eb4",
+                        "hex_without_replay":"76a914ec6039c0505e74b8f74fb1e22b77da64d30ce6b388ac",
                         "asm": "OP_DUP OP_HASH160 ec6039c0505e74b8f74fb1e22b77da64d30ce6b3 OP_EQUALVERIFY OP_CHECKSIG a975e6c1ba29f90821c40ca9590c5b4ded3cc855d4e0c40ddd73ab753f7e0000 937736 OP_CHECKBLOCKATHEIGHT",
                         "addresses": ["ztphoWCQmyJVuNq2L3SLnRgy2Lw5i5a7hxL"],
                         "type": "pubkeyhash",
@@ -412,6 +419,7 @@ tests = [
                     "n": 0,
                     "scriptPubKey": {
                         "hex": "76a914ec6039c0505e74b8f74fb1e22b77da64d30ce6b388ac2037be36242d04190743e7e50bb8bd268e5891883dd270ffacb65f7f3675ae010003704f0eb4",
+                        "hex_without_replay":"76a914ec6039c0505e74b8f74fb1e22b77da64d30ce6b388ac",
                         "asm": "OP_DUP OP_HASH160 ec6039c0505e74b8f74fb1e22b77da64d30ce6b3 OP_EQUALVERIFY OP_CHECKSIG 37be36242d04190743e7e50bb8bd268e5891883dd270ffacb65f7f3675ae0100 937840 OP_CHECKBLOCKATHEIGHT",
                         "addresses": ["ztphoWCQmyJVuNq2L3SLnRgy2Lw5i5a7hxL"],
                         "type": "pubkeyhash",
@@ -425,6 +433,7 @@ tests = [
                     "n": 1,
                     "scriptPubKey": {
                         "hex": "76a914ec6039c0505e74b8f74fb1e22b77da64d30ce6b388ac",
+                        "hex_without_replay":"76a914ec6039c0505e74b8f74fb1e22b77da64d30ce6b388ac",
                         "asm": "OP_DUP OP_HASH160 ec6039c0505e74b8f74fb1e22b77da64d30ce6b3 OP_EQUALVERIFY OP_CHECKSIG",
                         "addresses": ["ztphoWCQmyJVuNq2L3SLnRgy2Lw5i5a7hxL"],
                         "type": "pubkeyhash",
@@ -468,7 +477,7 @@ def test_tx_deserialiazation():
         # outputs
         for index, output in enumerate(tx.outputs):
             assert f'{output.value * 1e-8:.8f}' == test_data["raw_tx"]["vout"][index]["value"]
-            assert output.pk_script.hex() == test_data["raw_tx"]["vout"][index]["scriptPubKey"]["hex"]
+            assert output.pk_script.hex() == test_data["raw_tx"]["vout"][index]["scriptPubKey"]["hex_without_replay"]
 
         # locktime 
         assert tx.locktime == test_data["raw_tx"]["locktime"]
