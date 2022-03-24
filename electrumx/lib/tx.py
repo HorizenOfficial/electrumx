@@ -510,7 +510,8 @@ class DeserializerHorizen(DeserializerEquihash):
         sc_output_len = self._read_varint()
 
         for x in range(sc_output_len):
-            self._read_le_int32()   # withdrawalEpochLength
+            self._read_nbytes(3)    # withdrawalEpochLength
+            self._read_nbytes(1)    # version
             self._read_le_uint64()  # value
             self._read_nbytes(32)   # address
             custom_data_len = self._read_varint()  # customData
