@@ -1,3 +1,9 @@
+===============================================
+DEPRECATED
+===============================================
+
+This project is no longer maintained
+
 .. image:: https://travis-ci.org/spesmilo/electrumx.svg?branch=master
     :target: https://travis-ci.org/spesmilo/electrumx
 .. image:: https://coveralls.io/repos/github/spesmilo/electrumx/badge.svg
